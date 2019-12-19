@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  custom-resources
+
+  Sample SAM Template for custom-resources
+
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  CustomS3BucketSimple:
+    Type: Custom::S3BucketSimple
+    Properties:
+      ServiceToken: !GetAtt CustomS3BucketHandler.Arn
+      BucketName: customresource-demo.otto-aws.com
+
+  CustomS3BucketHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: s3bucket_simple/
+      Handler: main.handler
+      Runtime: python3.8
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: "s3:*"
+              Resource: "*"
+
+  # CustomS3BucketSimpleWithOutput:
+  #   Type: Custom::S3BucketSimpleWithOutput
+  #   Properties:
+  #     ServiceToken: !GetAtt CustomS3BucketSimpleWithOutputHandler.Arn
+  #     BucketName: customresource-demo.otto-aws.com
+
+  # CustomS3BucketSimpleWithOutputHandler:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: s3bucket_simple_with_output/
+  #     Handler: main.handler
+  #     Runtime: python3.8
+  #     Policies:
+  #       - Version: "2012-10-17"
+  #         Statement:
+  #           - Effect: Allow
+  #             Action: "s3:*"
+  #             Resource: "*"
+
+
+  # CustomS3Bucket:
+  #   Type: Custom::S3Bucket
+  #   Properties:
+  #     ServiceToken: !GetAtt CustomS3BucketHandler.Arn
+  #     BucketName: customresource12-demo.otto-aws.com
+
+  # CustomS3BucketHandler:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: s3bucket/
+  #     Handler: main.handler
+  #     Runtime: python3.8
+  #     Policies:
+  #       - Version: "2012-10-17"
+  #         Statement:
+  #           - Effect: Allow
+  #             Action: "s3:*"
+  #             Resource: "*"
+
+  # CustomS3BucketRandomName:
+  #   Type: Custom::S3BucketRandomName
+  #   Properties:
+  #     ServiceToken: !GetAtt CustomS3BucketRandomNameHandler.Arn
+
+  # CustomS3BucketRandomNameHandler:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: s3bucket_random/
+  #     Handler: main.handler
+  #     Runtime: python3.8
+  #     Policies:
+  #       - Version: "2012-10-17"
+  #         Statement:
+  #           - Effect: Allow
+  #             Action: "s3:*"
+  #             Resource: "*"
+
+# Outputs:
+#   MyBucketName:
+#     Value: !GetAtt CustomS3BucketSimpleWithOutput.MyBucketName
+#   Hello:
+#     Value: !GetAtt CustomS3BucketSimpleWithOutput.Hello
