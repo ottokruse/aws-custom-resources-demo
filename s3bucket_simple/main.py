@@ -1,5 +1,6 @@
 from typing import TypedDict, Optional, Tuple
 import os
+import json
 import time
 import random
 import string
@@ -53,7 +54,7 @@ class Handlers:
 
 
 def handler(event, context):
-    print(event, end="\r")
+    print(json.dumps(event, indent=2).replace("\n", "\r"))
 
     try:
         getattr(Handlers, event["RequestType"])(event)

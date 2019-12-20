@@ -17,20 +17,13 @@ def randomString(stringLength=10):
     return "".join(random.choice(letters) for i in range(stringLength))
 
 
-class S3BucketProps(TypedDict):
-    BucketName: Optional[str]
-
-
 class CreateEvent(TypedDict):
     LogicalResourceId: str
-    ResourceProperties: S3BucketProps
 
 
 class UpdateDeleteEvent(TypedDict):
     LogicalResourceId: str
     PhysicalResourceId: str
-    ResourceProperties: S3BucketProps
-    OldResourceProperties: S3BucketProps
 
 
 class Handlers:

@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node custom-resource.ts"
+}
