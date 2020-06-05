@@ -32,11 +32,11 @@ The examples build up (if you just want to see a good example, pick the last one
 
 You code a Lambda:
 
-- Your handler will receives events from CloudFormation
+- Your handler will receive events from CloudFormation
 - The event will contain (a.o.):
   - type: Create / Update / Delete
   - parameters: you provide these in your CloudFormation template (optional)
-  - callback URL: you need to HTTP PUT to this, at then end of your code
+  - callback URL: you need to HTTP PUT to this, at the end of your code
 - Your handler does what it needs to do (call API's, do whatever)
 - Your handler does the HTTP PUT to the callback URL to signal to CloudFormation that it is done (SUCCES / FAILED)
 
