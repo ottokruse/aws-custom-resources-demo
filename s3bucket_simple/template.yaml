@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  s3bucket_simple: naive implementation that does not utilize CloudFormation functionality around "Physical Resource ID"
+
+Globals:
+  Function:
+    Timeout: 10
+
+Parameters:
+  BucketName:
+    Type: String
+
+Resources:
+  CustomS3BucketSimple:
+    Type: Custom::S3BucketSimple
+    Properties:
+      ServiceToken: !GetAtt CustomS3BucketHandler.Arn
+      BucketName: !Ref BucketName
+
+  CustomS3BucketHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: handler/
+      Handler: main.handler
+      Runtime: python3.8
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: "s3:*"
+              Resource: "*"
