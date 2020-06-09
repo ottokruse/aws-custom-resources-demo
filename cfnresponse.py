@@ -8,9 +8,9 @@ Your Lambda code should ALWAYS report back to CloudFormation,
 otherwise CloudFormation will wait for 1 hour.
 
 There are alternatives to this little utility out there on the internet,
-some more full fledged in helping you write custom resource.
-Have a look and see which one you like. This one here workes well for me,
-I like that it doesn't have any dependencies.
+some more full fledged in helping you write custom resources.
+Have a look and see which one you like.
+This one here workes well for me, I like that it doesn't have any dependencies.
 """
 
 from urllib.request import Request, urlopen

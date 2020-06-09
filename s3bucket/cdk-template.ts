@@ -36,7 +36,7 @@ export class CustomS3Bucket extends cdk.Construct {
 
     const resource = new cfn.CustomResource(this, `${id}-s3-bucket`, {
       provider: cfn.CustomResourceProvider.fromLambda(lambdaHandler),
-      resourceType: "Custom::S3Bucket",
+      resourceType: "Custom::S3Bucket", // Invent your own resource type, just start with Custom::
       properties: {
         BucketName: props.bucketName,
       },
