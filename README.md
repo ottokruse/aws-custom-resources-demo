@@ -20,12 +20,15 @@ Examples of when to do this:
 
 To showcase how custom resources are built, we'll demonstrate the implementation of a custom resource that deploys an S3 bucket. Not just a normal S3 bucket (because you can do that with CloudFormation natively) but an S3 bucket that can be deleted by CloudFormation, even if it has objects in it. This is nice because when you delete a CloudFormation stack you often want the S3 buckets inside it to be deleted also, even if they contain objects. The native CloudFormation S3 resource "protects you" from doing this. That is probably wise in the general case, but if you know what you are doing it can be really annoying! So let's build a custom resource that will not protect us from ourselves.
 
-The examples build up (if you just want to see a good example, pick the last one):
+The examples build up (if you just want to see a good example, pick [s3bucket](./s3bucket)):
 
-- s3bucket_simple: naive implementation that does not utilize CloudFormation functionality around "Physical Resource ID"
-- s3bucket_simple_with_output: same implementation as `s3bucket_simple`, but shows how you can give outputs to your custom resource (that you can !GetAtt in your CloudFormation template)
-- s3bucket: proper example that uses "Physical Resource ID" to let CloudFormation handle deletes for you, if you change the BucketName input parameter
-- s3bucket_random: same implementation as `s3bucket`, but will generate a bucket name itself, if not provided explicitly.
+- [s3bucket_simple](./s3bucket_simple): naive implementation that does not utilize CloudFormation functionality around "Physical Resource ID"
+
+- [s3bucket_simple_with_output](./s3bucket_simple_with_output): same implementation as `s3bucket_simple`, but shows how you can give outputs to your custom resource (that you can !GetAtt in your CloudFormation template)
+
+- [s3bucket](./s3bucket): proper example that uses "Physical Resource ID" to let CloudFormation handle deletes for you, if you change the BucketName input parameter
+
+- [s3bucket_random](./s3bucket_random): same implementation as `s3bucket`, but will generate a bucket name itself, if not provided explicitly.
 
 
 ## High level way of implementing
@@ -34,9 +37,9 @@ You code a Lambda:
 
 - Your handler will receive events from CloudFormation
 - The event will contain (a.o.):
-  - type: Create / Update / Delete
-  - parameters: you provide these in your CloudFormation template (optional)
-  - callback URL: you need to HTTP PUT to this, at the end of your code
+  - Request type: Create / Update / Delete
+  - Parameters: you provide these in your CloudFormation template (optional)
+  - Callback URL: you need to HTTP PUT to this, at the end of your code
 - Your handler does what it needs to do (call API's, do whatever)
 - Your handler does the HTTP PUT to the callback URL to signal to CloudFormation that it is done (SUCCES / FAILED)
 
