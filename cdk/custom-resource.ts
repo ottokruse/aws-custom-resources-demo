@@ -2,7 +2,6 @@
 import "source-map-support/register";
 import cdk = require("@aws-cdk/core");
 import s3 = require("@aws-cdk/aws-s3");
-import s3d = require("@aws-cdk/aws-s3-deployment");
 import lambda = require("@aws-cdk/aws-lambda");
 import cfn = require("@aws-cdk/aws-cloudformation");
 import iam = require("@aws-cdk/aws-iam");

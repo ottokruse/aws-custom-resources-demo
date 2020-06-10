@@ -9,6 +9,7 @@ import path = require("path");
 
 export class CustomS3Bucket extends cdk.Construct {
   public bucketName: string;
+  public hello: string;
 
   constructor(scope: cdk.Construct, id: string, props: { bucketName: string }) {
     super(scope, id);
@@ -19,7 +20,7 @@ export class CustomS3Bucket extends cdk.Construct {
       {
         uuid: "cdk-custom-resource-handler",
         lambdaPurpose: "cdk-custom-resource-handler",
-        code: new lambda.AssetCode(path.join(__dirname, "handler")),
+        code: new lambda.AssetCode(path.join(__dirname, "..", "lambda-handler")),
         handler: "main.handler",
         runtime: lambda.Runtime.PYTHON_3_8,
         timeout: cdk.Duration.seconds(30),
@@ -43,6 +44,7 @@ export class CustomS3Bucket extends cdk.Construct {
     });
 
     this.bucketName = resource.getAtt("MyBucketName").toString();
+    this.hello = resource.getAtt("Hello").toString();
   }
 }
 
@@ -50,7 +52,15 @@ export class CustomResourceStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new CustomS3Bucket(this, "CustomS3Bucket", { bucketName: "test" });
+    const bucket = new CustomS3Bucket(this, "CustomS3Bucket", { bucketName: "test-cr.otto-aws.com" });
+
+    new cdk.CfnOutput(this, 'BucketName', {
+      value: bucket.bucketName
+    });
+
+    new cdk.CfnOutput(this, 'Hello', {
+      value: bucket.hello
+    });
   }
 }
 

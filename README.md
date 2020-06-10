@@ -13,34 +13,27 @@ In your code, the implementation of the custom resource, you typically call into
 Examples of when to do this:
 
 - You want to include in your stack an AWS service that has no CloudFormation support yet
+
 - You want to include in your stack an AWS service that does have CloudFormation support, but it doesn't support the latest services features that are supported by the service API (and SDK's)
+
 - Upon deploying your cloudformation stack, you want to run some custom logic in a Lambda function
 
-## The examples
+## Implementing an AWS CloudFormation Custom Resource
+
+There are several ways to implement a Custom Resource:
+
+- You code a Lambda Function that will be invoked by CloudFormation, when performing Stack creates/updates/deletes. This mechanism is showcased in this repository and is probably the easiest way to create CloudFormation resources. Several libraries out can help you code such Lambda's (although once you understand it you'll find it is quite simple).
+
+- You provide an SNS topic that CloudFormation will send messages to, when performing Stack creates/updates/deletes. You need to subscribe to this SNS topic and react accordingly. Using SNS opens up a lot of possibilities, like e.g. listening to such messaged using an on-premise process, for creating on-premise resources. This mechanism is not showcased in this repo.
+
+- Use the CloudFormation Provider Development Toolkit [link](https://github.com/aws-cloudformation/cloudformation-cli) and [register your custom resource provider](https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-register.html) to the [CloudFormation Registry](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html). I have not used this yet but I am eager to explore it. From the looks of it, this is a more complex approach than using a simple Lambda, but has the benefit of being able to make your Custom Resource available for re-use by others. __TODO__: explore and provide example - will accept __PR's__ :)
+
+## The example
 
 To showcase how custom resources are built, we'll demonstrate the implementation of a custom resource that deploys an S3 bucket. Not just a normal S3 bucket (because you can do that with CloudFormation natively) but an S3 bucket that can be deleted by CloudFormation, even if it has objects in it. This is nice because when you delete a CloudFormation stack you often want the S3 buckets inside it to be deleted also, even if they contain objects. The native CloudFormation S3 resource "protects you" from doing this. That is probably wise in the general case, but if you know what you are doing it can be really annoying! So let's build a custom resource that will not protect us from ourselves.
 
-The examples build up (if you just want to see a good example, pick [s3bucket](./s3bucket)):
+- [lambda-handler](./lambda-handler): this is the implementation of the Custom Resource Lambda function (in Python)
 
-- [s3bucket_simple](./s3bucket_simple): naive implementation that does not utilize CloudFormation functionality around "Physical Resource ID"
+- [cloudformation](./cloudformation): this shows how to include the Custom Resource in a CloudFormation (/SAM) template
 
-- [s3bucket_simple_with_output](./s3bucket_simple_with_output): same implementation as `s3bucket_simple`, but shows how you can give outputs to your custom resource (that you can !GetAtt in your CloudFormation template)
-
-- [s3bucket](./s3bucket): proper example that uses "Physical Resource ID" to let CloudFormation handle deletes for you, if you change the BucketName input parameter
-
-- [s3bucket_random](./s3bucket_random): same implementation as `s3bucket`, but will generate a bucket name itself, if not provided explicitly.
-
-
-## High level way of implementing
-
-You code a Lambda:
-
-- Your handler will receive events from CloudFormation
-- The event will contain (a.o.):
-  - Request type: Create / Update / Delete
-  - Parameters: you provide these in your CloudFormation template (optional)
-  - Callback URL: you need to HTTP PUT to this, at the end of your code
-- Your handler does what it needs to do (call API's, do whatever)
-- Your handler does the HTTP PUT to the callback URL to signal to CloudFormation that it is done (SUCCES / FAILED)
-
-You can also use SNS instead of Lambda, but that is not covered in this repo.
+- [cdk](./cdk): this shows how to include the Custom Resource in a CDK app
