@@ -14,7 +14,7 @@ Examples of when to do this:
 
 - You want to include in your stack an AWS service that has no CloudFormation support yet
 
-- You want to include in your stack an AWS service that does have CloudFormation support, but it doesn't support the latest services features that are supported by the service API (and SDK's)
+- You want to include in your stack an AWS service that does have CloudFormation support, but it doesn't support the latest features that are supported by the service API (and SDK's)
 
 - Upon deploying your cloudformation stack, you want to run some custom logic in a Lambda function
 
