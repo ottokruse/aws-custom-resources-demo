@@ -11,39 +11,6 @@ AWS_REGION = os.environ["AWS_REGION"]
 S3_RESOURCE = boto3.resource("s3", region_name=os.environ["AWS_REGION"])
 
 
-def randomString(stringLength=10):
-    """Generate a random string of fixed length """
-    letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(stringLength))
-
-
-class ResourceProperties(TypedDict):
-    BucketName: Optional[str]
-
-
-class CloudFormationEvent(TypedDict):
-    RequestType: Union[Literal["Create"], Literal["Update"], Literal["Delete"]]
-    LogicalResourceId: str
-    ResourceProperties: ResourceProperties
-
-
-class CreateEvent(CloudFormationEvent):
-    pass
-
-
-class UpdateEvent(CloudFormationEvent):
-    PhysicalResourceId: str
-    OldResourceProperties: ResourceProperties
-
-
-class DeleteEvent(CloudFormationEvent):
-    PhysicalResourceId: str
-
-
-PhysicalResourceId = str
-Data = Dict[str, str]
-
-
 class Handlers:
     @staticmethod
     def Create(event: CreateEvent) -> Tuple[PhysicalResourceId, Data]:
@@ -109,12 +76,14 @@ class Handlers:
 
 
 def handler(event: Union[CreateEvent, UpdateEvent, DeleteEvent], context):
+
     # Log the event to CloudWatch Logs for debugging (if needed)
     # Using /r instead of /n makes the log entry nicely expandable in CloudWatch logs
     print(json.dumps(event, indent=2).replace("\n", "\r"))
 
     # The outer try-except block ensures that a response is ALWAYS send to CloudFormation
     try:
+
         # Use the "RequestType" from the event (Create/Update/Delete),
         #   to determine the right function to call, and then call it passing the event.
         #
@@ -128,6 +97,8 @@ def handler(event: Union[CreateEvent, UpdateEvent, DeleteEvent], context):
         physical_resource_id, response_data = getattr(Handlers, event["RequestType"])(
             event
         )
+
+        # All done! Let CloudFormation know about our success
         CfnResponse.send(
             event,
             context,
@@ -135,7 +106,11 @@ def handler(event: Union[CreateEvent, UpdateEvent, DeleteEvent], context):
             response_data=response_data,
             physical_resource_id=physical_resource_id,
         )
+
     except Exception as e:
+
+        # Oops, we failed! Let's tell CloudFormation about this, so it knows
+        #    and can rollback other changes in the stack
         CfnResponse.send(
             event,
             context,
@@ -145,7 +120,45 @@ def handler(event: Union[CreateEvent, UpdateEvent, DeleteEvent], context):
                 "PhysicalResourceId"
             ),
         )
-        # Raise the error after sending the CloudFormation response:
+
+        # Do raise the error again after sending the CloudFormation response:
         #  - this makes the error (and stack) visible in CloudWatch Logs
         #  - this reflects the invocation failure in CloudWatch metrics
         raise
+
+
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return "".join(random.choice(letters) for i in range(stringLength))
+
+
+# The definitions below are for typings, which are optional in Python, but can
+#     be helpful during development
+
+
+class ResourceProperties(TypedDict):
+    BucketName: Optional[str]
+
+
+class CloudFormationEvent(TypedDict):
+    RequestType: Union[Literal["Create"], Literal["Update"], Literal["Delete"]]
+    LogicalResourceId: str
+    ResourceProperties: ResourceProperties
+
+
+class CreateEvent(CloudFormationEvent):
+    pass
+
+
+class UpdateEvent(CloudFormationEvent):
+    PhysicalResourceId: str
+    OldResourceProperties: ResourceProperties
+
+
+class DeleteEvent(CloudFormationEvent):
+    PhysicalResourceId: str
+
+
+PhysicalResourceId = str
+Data = Dict[str, str]
