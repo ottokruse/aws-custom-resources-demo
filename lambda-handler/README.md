@@ -1,6 +1,10 @@
 # Implementation of an AWS CloudFormation Custom Resource in AWS Lambda
 
-The code in this folder demonstrates how you can use AWS Lambda to implement a Custom Resource.
+The code in this folder demonstrates how you can implement a Custom Resource.
+
+- [./main.py](./main.py): the implementation of the Custom Resource by a Lambda function
+
+- [./cfnresponse.py](./cfnresponse.py): helper utility to send responses to the CloudFormation callback URL
 
 ## Outline: creating a Custom Resource in AWS Lambda
 

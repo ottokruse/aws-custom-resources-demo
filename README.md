@@ -16,7 +16,9 @@ Examples of when to do this:
 
 - You want to include in your stack an AWS service that does have CloudFormation support, but it doesn't support the latest features that are supported by the service API (and SDK's)
 
-- Upon deploying your cloudformation stack, you want to run some custom logic in a Lambda function
+- You want to include in your stack a non-AWS component, maybe even one that should be deployed on-premise. For tracking purposes you like it to be part of the stack in AWS
+
+- Upon deploying your cloudformation stack, you want to run some custom logic
 
 ## The example
 
