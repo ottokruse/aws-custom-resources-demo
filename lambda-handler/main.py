@@ -143,7 +143,11 @@ class ResourceProperties(TypedDict):
 
 class CloudFormationEvent(TypedDict):
     RequestType: Union[Literal["Create"], Literal["Update"], Literal["Delete"]]
+    RequestId: str
+    ResponseURL: str
+    ResourceType: str
     LogicalResourceId: str
+    StackId: str
     ResourceProperties: ResourceProperties
 
 
