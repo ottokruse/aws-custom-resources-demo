@@ -25,6 +25,7 @@ __all__ = ("CfnResponse",)
 
 from urllib.request import Request, urlopen
 import json
+from typing import Union, Dict, Literal, Optional
 
 
 class CfnResponse:
@@ -42,10 +43,10 @@ class CfnResponse:
     def send(
         event,
         context,
-        response_status,
-        reason="See CloudWatch Logs",
-        response_data=None,
-        physical_resource_id=None,
+        response_status: Union[Literal["SUCCESS"], Literal["FAILED"]],
+        reason: str = "See CloudWatch Logs",
+        response_data: Optional[Dict[str, str]] = None,
+        physical_resource_id: Optional[str] = None,
     ):
         """Use send() to send the response back to CloudFormation,
         indicating that your Custom Resource code is "done": it has
