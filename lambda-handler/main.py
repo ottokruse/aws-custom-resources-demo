@@ -7,8 +7,8 @@ import boto3
 import json
 from cfnresponse import CfnResponse
 
-AWS_REGION = os.environ["AWS_REGION"]
-S3_RESOURCE = boto3.resource("s3", region_name=os.environ["AWS_REGION"])
+AWS_REGION = cast(Any, os.environ["AWS_REGION"])  # Cast to prevent typing issue
+S3_RESOURCE = boto3.resource("s3", region_name=AWS_REGION)
 
 
 class Handlers:
@@ -29,7 +29,7 @@ class Handlers:
             bucket_name = f'{event["LogicalResourceId"].lower()}{randomString()}'
 
         S3_RESOURCE.Bucket(name=bucket_name).create(
-            CreateBucketConfiguration={"LocationConstraint": cast(Any, AWS_REGION)},
+            CreateBucketConfiguration={"LocationConstraint": AWS_REGION},
         )
         return bucket_name, {"MyBucketName": bucket_name, "Hello": "world"}
 
