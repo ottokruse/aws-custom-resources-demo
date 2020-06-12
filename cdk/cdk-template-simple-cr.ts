@@ -12,8 +12,8 @@ supported by CloudFormation (e.g. turning on HTTPS enforcement on an ElasticSear
 The example below is just a bogus example that creates an S3 bucket (for which you would not
 need a custom resource because native CloudFormation can do that).
 
-Note that the other feature we implemented in this repo, deleting the objects in the bucket,
-cannot be done using this method, as there is no corresponding AWS SDK call to do that.
+Note that the other feature we implemented in this repo, emptying the bucket,
+cannot be done using this method, as there is no corresponding AWS JS SDK call for that.
 */
 
 import "source-map-support/register";
@@ -40,7 +40,7 @@ export class CustomS3Bucket extends cdk.Construct {
       scope,
       `${id}-s3-bucket-cr`,
       {
-        policy: cr.AwsCustomResourcePolicy.fromSdkCalls({ resources: ["*"] }), // Let CDK infer the needed permissions from you SDK call
+        policy: cr.AwsCustomResourcePolicy.fromSdkCalls({ resources: ["*"] }), // Let CDK infer the needed permissions from your SDK call
         onCreate: {
           service: "S3",// This is the AWS service as used in the AWS JS SDK when constructing a service interface object, e.g. as in `const s3client = new AWS.S3()`
           action: "createBucket", // This is the function you want to call, as you would in the AWS JS SDK, e.g. as in `s3client.createBucket(...)`
