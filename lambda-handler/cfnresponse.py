@@ -48,7 +48,7 @@ class CfnResponse:
         event,
         context,
         response_status: Union[Literal["SUCCESS"], Literal["FAILED"]],
-        reason: str = "See CloudWatch Logs",
+        reason: Optional[str] = "See CloudWatch Logs",
         response_data: Optional[Dict[str, str]] = None,
         physical_resource_id: Optional[str] = None,
     ):
