@@ -1,24 +1,28 @@
 """
 This is a helper utility to send responses to the CloudFormation callback URL.
 
+If you're looking for a NodeJS variant, here's one:
+    https://gist.github.com/ottokruse/f08099eea65412f7376525d5d1cd968b
+
 Typically you invoke this utility at the end of your Custom Resource Lambda code,
     or as soon as a (non-recoverable) error occurs in your code.
 
 Your Lambda code should ALWAYS report back to CloudFormation,
     otherwise CloudFormation will wait for 1 hour in vain.
 
-There are alternatives to this little utility out there:
+This utility is an alternative to the bundled one:
+    https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html
 
-    - there's the bundled one which I don't really like, because it does not allow you to provide
-          a custom error message: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html
-    - Other example are more full fledged in helping you write custom resources,
-          e.g. https://pypi.org/project/cfn-custom-resource/
+I rather use this utility instead of the bundled one because:
 
-The utility file you're looking at now works well enough for me:
+  - The bundled cfn-response module is available only when you use the ZipFile property
+    to write your source code. It isn't available for source code that's stored in
+    Amazon S3 buckets (like SAM packaged Lambda code).
 
-    - It allows you to use a custom error message that will be
-        visible in CloudFormation events tab
-    - It doesn't have any dependencies beyond stdlib
+  - The bundled cfn-response module does not allow you to provide a custom error
+    message, but instead always refers to CloudWatch logs. I like to have my error
+    message visible in the CloudFormation events tab, without having to search for
+    it in CloudWatch logs.
 """
 
 __all__ = ("CfnResponse",)

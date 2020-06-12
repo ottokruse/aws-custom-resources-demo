@@ -39,3 +39,13 @@ There are several ways to implement a Custom Resource:
 - You provide an SNS topic that CloudFormation will send messages to, when performing Stack creates/updates/deletes. You need to subscribe to this SNS topic and react accordingly. Using SNS opens up a lot of possibilities, like e.g. listening to such messaged using an on-premise process, for creating on-premise resources. This mechanism is not showcased in this repo.
 
 - Use the [CloudFormation Provider Development Toolkit](https://github.com/aws-cloudformation/cloudformation-cli) and [register your custom resource provider](https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-register.html) to the [CloudFormation Registry](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html). This is a way more elaborate approach than using a simple Lambda, but has the benefit of being able to make your Custom Resource available for re-use by others. __TODO__: provide example - will accept __PR's__ :)
+
+### Libraries and frameworks to help you develop Custom Resources
+
+The following is a list of libraries and frameworks to help you develop custom resources:
+
+- [AWS Cloud Development Kit (AWS CDK)](https://docs.aws.amazon.com/cdk/latest/guide/home.html) includes a "mini-framework" for implementing providers for AWS CloudFormation custom resources.
+
+- [cfn-custom-resource](https://pypi.org/project/cfn-custom-resource/) is a Python library that makes it a bit easier to write the Lambda code.
+
+- ... __TODO__: mention other relevant ones
