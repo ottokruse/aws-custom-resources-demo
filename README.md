@@ -44,8 +44,8 @@ There are several ways to implement a Custom Resource:
 
 The following is a list of libraries and frameworks to help you develop custom resources:
 
-- [AWS Cloud Development Kit (AWS CDK)](https://docs.aws.amazon.com/cdk/latest/guide/home.html) includes a "mini-framework" for implementing providers for AWS CloudFormation custom resources.
+- [AWS Cloud Development Kit (AWS CDK)](https://docs.aws.amazon.com/cdk/latest/guide/home.html) includes a "mini-framework" for implementing providers for AWS CloudFormation custom resources: [CDK custom-resources module](https://docs.aws.amazon.com/cdk/api/latest/docs/custom-resources-readme.html)
 
-- [cfn-custom-resource](https://pypi.org/project/cfn-custom-resource/) is a Python library that makes it a bit easier to write the Lambda code.
+- [cfn-custom-resource](https://pypi.org/project/cfn-custom-resource/) is a Python library that makes it a easier to write the Lambda code to implement a Custom Respource.
 
 - ... __TODO__: mention other relevant ones
