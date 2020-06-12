@@ -35,9 +35,12 @@ class Handlers:
             # The user did not provide a BucketName explicitly so we'll generate one
             bucket_name = f'{event["LogicalResourceId"].lower()}{randomString()}'
 
-        S3_RESOURCE.Bucket(name=bucket_name).create(
-            CreateBucketConfiguration={"LocationConstraint": AWS_REGION},
-        )
+        bucket = S3_RESOURCE.Bucket(name=bucket_name)
+        if AWS_REGION != "us-east-1":
+            bucket.create(CreateBucketConfiguration={"LocationConstraint": AWS_REGION})
+        else:
+            bucket.create()
+
         return bucket_name, {"MyBucketName": bucket_name, "Hello": "world"}
 
     @classmethod
