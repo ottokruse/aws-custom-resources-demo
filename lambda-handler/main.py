@@ -1,3 +1,10 @@
+"""
+To showcase how custom resources are built, we'll demonstrate the implementation of a
+custom resource that deploys an S3 bucket. Not just a normal S3 bucket (because you
+can do that with CloudFormation natively) but an S3 bucket that can be deleted by
+CloudFormation, even if it has objects in it.
+"""
+
 from typing import TypedDict, Optional, Tuple, cast, Any, Union, Literal, Dict
 import os
 import time
