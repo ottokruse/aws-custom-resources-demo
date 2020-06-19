@@ -39,9 +39,9 @@ class CfnResponse:
         SUCCESS (str): constant to indicate success to CloudFormation
         FAILED (str): constant to indicate failure to CloudFormation
     """
-
-    SUCCESS = "SUCCESS"
-    FAILED = "FAILED"
+    
+    SUCCESS: Literal["SUCCESS"] = "SUCCESS"
+    FAILED: Literal["FAILED"] = "FAILED"
 
     @staticmethod
     def send(
